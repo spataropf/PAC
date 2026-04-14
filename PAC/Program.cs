@@ -1,9 +1,12 @@
-﻿using Spectre.Console;
+﻿using PAC.Core;
 
-class Program
+namespace PAC;
+
+public class Program
 {
-    static void Main()
+    public static void Main(string[] args)
     {
-     
+        GameEngine game = new GameEngine();
+        game.Start();
     }
 }

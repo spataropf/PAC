@@ -4,7 +4,8 @@ using System.Text;
 
 namespace PAC.Combat
 {
-    internal class Attack
+    public class Attack
     {
+        
     }
 }

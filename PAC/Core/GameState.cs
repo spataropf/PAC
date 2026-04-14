@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿namespace PAC.Core;
 
-namespace PAC.Core
+public enum GameState
 {
-    internal class GameState
-    {
-    }
+    Menu,
+    Exploration,
+    Combat
 }

@@ -1,10 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿namespace PAC.Models;
 
-namespace PAC.Models
+public class Enemy : Character
 {
-    internal class Enemy
+    public int RewardXp { get; private set; }
+
+    public Enemy(string name, int health, int attack, int rewardXp)
+        : base(name, health, attack)
     {
+        RewardXp = rewardXp;
     }
 }

@@ -1,10 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿namespace PAC.Models;
 
-namespace PAC.Models
+public class Item
 {
-    internal class Item
+    public string Name { get; private set; }
+    public string Description { get; private set; }
+    public int Value { get; private set; }
+
+    public Item(string name, string description, int value)
     {
+        Name = name;
+        Description = description;
+        Value = value;
     }
 }

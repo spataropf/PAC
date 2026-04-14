@@ -1,10 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿namespace PAC.Models;
 
-namespace PAC.Models
+public class Inventory
 {
-    internal class Inventory
+    private List<Item> items;
+
+    public Inventory()
     {
+        items = new List<Item>();
+    }
+
+    public void AddItem(Item item)
+    {
+        items.Add(item);
+    }
+
+    public void RemoveItem(Item item)
+    {
+        items.Remove(item);
+    }
+
+    public List<Item> GetItems()
+    {
+        return items;
     }
 }
