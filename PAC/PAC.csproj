@@ -12,12 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Core\" />
-    <Folder Include="Combat\" />
-    <Folder Include="Interfaces\" />
-    <Folder Include="Services\" />
-    <Folder Include="World\" />
-    <Folder Include="UI\" />
+    <Folder Include="Docs\" />
   </ItemGroup>
 
 </Project>
