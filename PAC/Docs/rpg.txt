@@ -1,6 +1,6 @@
 Mon thème: rpg
 Mon application permet de jouer un personnage dans un jeu de role.
-Car j'ai déjà fait des études en jeu vidéo et que je voulais un truc pas trop difficile.
+Car j'ai déjà fait des études en jeu vidéo et que je voulais un truc pas trop difficile/en dehors de mes compétences actuelles
 
 Mon héritage est logique car un joueur et un ennemi sont tous les 2 des personnages
 
