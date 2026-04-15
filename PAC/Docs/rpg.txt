@@ -2,3 +2,9 @@ Mon thème: rpg
 Mon application permet de jouer un personnage dans un jeu de role.
 Car j'ai déjà fait des études en jeu vidéo et que je voulais un truc pas trop difficile.
 
+Mon héritage est logique car un joueur et un ennemi sont tous les 2 des personnages
+
+J'ai mis une méthode takeDamage dans Personnage (Characters) et elle est virtual 
+je n'ai pas encore fait le override mais le takeDamage sera différent pour le joueur et l'ennemi (question équilibrage)
+
+J'aurais du coder le menu en premier mais j'ai d'abord fait Characters parceque je voulais faire des petits tests (pour ma propre compréhension)
