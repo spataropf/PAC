@@ -1,4 +1,6 @@
 ﻿using PAC.Models;
+using PAC.Combat;
+using Spectre.Console;
 
 namespace PAC.Core;
 
@@ -36,22 +38,26 @@ public class GameEngine
 
     private void ShowMenu()
     {
-        Console.Clear();
-        Console.WriteLine("=== mini RPG ===");
-        Console.WriteLine("1. New Game");
-        Console.WriteLine("2. Quit");
+        AnsiConsole.Clear();
 
-        string choice = Console.ReadLine();
+        AnsiConsole.Write(
+            new FigletText("Mini RPG")
+                .Centered()
+                .Color(Color.Green));
 
-        if (choice == "1")
+        string choice = AnsiConsole.Prompt(
+            new SelectionPrompt<string>()
+                .Title("[yellow]Choose an option :[/]")
+                .AddChoices("New Game", "Quit"));
+
+        if (choice == "New Game")
         {
-            Console.Write("Player Name: ");
-            string playerName = Console.ReadLine();
+            string playerName = AnsiConsole.Ask<string>("[green]Player Name :[/]");
 
             player = new Player(playerName);
             state = GameState.Exploration;
         }
-        else if (choice == "2")
+        else if (choice == "Quit")
         {
             Environment.Exit(0);
         }
@@ -76,9 +82,17 @@ public class GameEngine
             switch (choice)
             {
                 case "1":
-                    Console.WriteLine("You are exploring a mysterious area...");
-                    Console.WriteLine("But nothing happens yet.");
-                    Console.ReadKey();
+                    Enemy enemy = new Enemy("Goblin", 50, 5, 50);
+
+                    CombatManager combat = new CombatManager();
+                    combat.StartCombat(player, enemy);
+
+                    if (!player.IsAlive)
+                    {
+                        Console.WriteLine("Game Over...");
+                        Console.ReadKey();
+                        Environment.Exit(0);
+                    }
                     break;
 
                 case "2":
