@@ -1,13 +1,15 @@
 ﻿using PAC.Models;
 using PAC.Combat;
 using Spectre.Console;
-
+using PAC.UI;
 namespace PAC.Core;
 
 public class GameEngine
 {
     private Player player;
     private GameState state;
+    private Display display = new Display();
+    private Menu menu = new Menu();
 
     public void Start()
     {
@@ -28,31 +30,17 @@ public class GameEngine
                 case GameState.Exploration:
                     Explore();
                     break;
-
-                case GameState.Combat:
-                    StartCombat();
-                    break;
             }
         }
     }
 
     private void ShowMenu()
     {
-        AnsiConsole.Clear();
-
-        AnsiConsole.Write(
-            new FigletText("Mini RPG")
-                .Centered()
-                .Color(Color.Green));
-
-        string choice = AnsiConsole.Prompt(
-            new SelectionPrompt<string>()
-                .Title("[yellow]Choose an option :[/]")
-                .AddChoices("New Game", "Quit"));
+        string choice = menu.ShowMainMenu();
 
         if (choice == "New Game")
         {
-            string playerName = AnsiConsole.Ask<string>("[green]Player Name :[/]");
+            string playerName = menu.AskPlayerName();
 
             player = new Player(playerName);
             state = GameState.Exploration;
@@ -67,39 +55,45 @@ public class GameEngine
     {
         while (state == GameState.Exploration)
         {
-            Console.Clear();
+            AnsiConsole.Clear();
 
-            Console.WriteLine($"=== Exploration ===");
-            Console.WriteLine($"Player : {player.Name}");
-            Console.WriteLine($"HP : {player.Health}/{player.MaxHealth}");
-            Console.WriteLine();
-            Console.WriteLine("1. Exploring");
-            Console.WriteLine("2. View Inventory");
-            Console.WriteLine("3. Return to Menu");
+            display.ShowPlayerStats(player);
 
-            string choice = Console.ReadLine();
+            string choice = AnsiConsole.Prompt(
+                new SelectionPrompt<string>()
+                    .Title("[yellow]What do you want to do?[/]")
+                    .AddChoices(
+                        "Explore an area",
+                        "Show inventory",
+                        "Return to menu"
+                    ));
 
             switch (choice)
             {
-                case "1":
-                    Enemy enemy = new Enemy("Goblin", 50, 5, 50);
+                case "Explore an area":
+                    Enemy enemy = new Enemy("Gobelin", 50, 5, 50);
 
                     CombatManager combat = new CombatManager();
-                    combat.StartCombat(player, enemy);
+                    Item? loot = combat.StartCombat(player, enemy);
+
+                    if (loot != null)
+                    {
+                        player.Inventory.AddItem(loot);
+                    }
 
                     if (!player.IsAlive)
                     {
-                        Console.WriteLine("Game Over...");
+                        AnsiConsole.MarkupLine("[red]Game Over...[/]");
                         Console.ReadKey();
                         Environment.Exit(0);
                     }
                     break;
 
-                case "2":
+                case "Show inventory":
                     ShowInventory();
                     break;
 
-                case "3":
+                case "Return to menu":
                     state = GameState.Menu;
                     break;
             }
@@ -107,28 +101,58 @@ public class GameEngine
     }
     private void ShowInventory()
     {
-        Console.Clear();
-        Console.WriteLine("=== Inventory ===");
+        AnsiConsole.Clear();
+
+        AnsiConsole.Write(
+            new FigletText("Inventory")
+                .Centered()
+                .Color(Color.Blue));
 
         List<Item> items = player.Inventory.GetItems();
 
         if (items.Count == 0)
         {
-            Console.WriteLine("Inventory is empty.");
+            AnsiConsole.MarkupLine("[red]Inventory is empty.[/]");
+            Console.ReadKey();
+            return;
         }
-        else
+
+        List<string> choices = new List<string>();
+
+        foreach (Item item in items)
         {
-            foreach (Item item in items)
+            choices.Add(item.Name);
+        }
+
+        choices.Add("Back");
+
+        string choice = AnsiConsole.Prompt(
+    new SelectionPrompt<string>()
+        .Title("[yellow]Choose an item :[/]")
+        .AddChoices(choices));
+
+        if (choice == "Back")
+            return;
+
+        Item selectedItem = null;
+
+        foreach (Item item in items)
+        {
+            if (item.Name == choice)
             {
-                Console.WriteLine($"- {item.Name}");
+                selectedItem = item;
+                break;
             }
         }
 
-        Console.WriteLine("Press any key to return.");
-        Console.ReadKey();
-    }
+        if (selectedItem != null)
+        {
+            selectedItem.Use(player);
+            player.Inventory.RemoveItem(selectedItem);
 
-    private void StartCombat()
-    {
+            AnsiConsole.MarkupLine($"[green]{selectedItem.Name} used![/]");
+        }
+
+        Console.ReadKey();
     }
 }

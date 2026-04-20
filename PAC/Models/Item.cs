@@ -12,4 +12,8 @@ public class Item
         Description = description;
         Value = value;
     }
+    public void Use(Player player)
+    {
+        player.Heal(Value);
+    }
 }

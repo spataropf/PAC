@@ -1,6 +1,8 @@
-﻿namespace PAC.Models;
+﻿using PAC.Interfaces;
 
-public abstract class Character
+namespace PAC.Models;
+
+public abstract class Character : IAttackable
 {
     public string Name { get; private set; }
     public int Health { get; private set; }

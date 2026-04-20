@@ -1,21 +1,25 @@
-﻿using PAC.Models;
-
+﻿using PAC.Interfaces;
+using PAC.Models;
+using Spectre.Console;
 namespace PAC.Combat;
 
 public class CombatManager
 {
-    public void StartCombat(Player player, Enemy enemy)
+    public Item? StartCombat(Player player, Enemy enemy)
     {
         while (player.IsAlive && enemy.IsAlive)
         {
-            Console.Clear();
+            AnsiConsole.Clear();
 
-            Console.WriteLine("=== Fight ===");
-            Console.WriteLine($"{player.Name} : {player.Health}/{player.MaxHealth} HP");
-            Console.WriteLine($"{enemy.Name} : {enemy.Health}/{enemy.MaxHealth} HP");
-            Console.WriteLine();
-            Console.WriteLine("Press any key to attack.");
+            AnsiConsole.Write(
+                new Panel(
+                    $"[green]{player.Name}[/] : {player.Health}/{player.MaxHealth} HP\n" +
+                    $"[red]{enemy.Name}[/] : {enemy.Health}/{enemy.MaxHealth} HP")
+                .Header("[yellow]Combat[/]")
+                .Border(BoxBorder.Rounded)
+            );
 
+            AnsiConsole.MarkupLine("[grey]Press a key to attack...[/]");
             Console.ReadKey();
 
             enemy.TakeDamage(player.Attack);
@@ -30,15 +34,20 @@ public class CombatManager
 
         if (player.IsAlive)
         {
-            Console.WriteLine("Victory!");
+            AnsiConsole.MarkupLine("[green]Victory![/]");
             player.GainExperience(enemy.RewardXp);
+
+            Item potion = new Item("Potion", "Heals 20 HP", 20);
+            Console.WriteLine("You found a potion!");
+            Console.ReadKey();
+
+            return potion;
         }
         else
         {
-            Console.WriteLine("Defeat...");
+            AnsiConsole.MarkupLine("[red]Defeat...[/]");
+            Console.ReadKey();
+            return null;
         }
-
-        Console.WriteLine("Press any key to continue.");
-        Console.ReadKey();
     }
 }

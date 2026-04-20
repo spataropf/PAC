@@ -1,10 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using Spectre.Console;
+using PAC.Models;
 
-namespace PAC.UI
+namespace PAC.UI;
+
+public class Display
 {
-    internal class Display
+    public void ShowPlayerStats(Player player)
     {
+        AnsiConsole.Write(
+            new Panel($"[green]{player.Name}[/]\nHP : {player.Health}/{player.MaxHealth}")
+                .Header("Statistics")
+                .Border(BoxBorder.Rounded));
     }
 }

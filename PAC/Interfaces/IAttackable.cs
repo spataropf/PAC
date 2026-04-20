@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿namespace PAC.Interfaces;
 
-namespace PAC.Interfaces
+public interface IAttackable
 {
-    internal class IAttackable
-    {
-    }
+    void TakeDamage(int damage);
+    bool IsAlive { get; }
 }
