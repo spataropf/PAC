@@ -16,7 +16,7 @@ public class Menu
         return AnsiConsole.Prompt(
             new SelectionPrompt<string>()
                 .Title("[yellow]Choose an option :[/]")
-                .AddChoices("New Game", "Quit"));
+                .AddChoices("New Game", "Load Game", "Quit"));
     }
 
     public string AskPlayerName()

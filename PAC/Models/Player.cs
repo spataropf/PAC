@@ -2,9 +2,13 @@
 
 public class Player : Character
 {
-    public int Level { get; private set; }
-    public int Experience { get; private set; }
-    public Inventory Inventory { get; private set; }
+    public int Level { get; set; }
+    public int Experience { get; set; }
+    public Inventory Inventory { get; set; }
+    public Player() : base("", 0, 0)
+    {
+        Inventory = new Inventory();
+    }
 
     public Player(string name) : base(name, 100, 10)
     {

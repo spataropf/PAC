@@ -2,25 +2,25 @@
 
 public class Inventory
 {
-    private List<Item> items;
+    public List<Item> Items { get; set; }
 
     public Inventory()
     {
-        items = new List<Item>();
+        Items = new List<Item>();
     }
 
     public void AddItem(Item item)
     {
-        items.Add(item);
+        Items.Add(item);
     }
 
     public void RemoveItem(Item item)
     {
-        items.Remove(item);
+        Items.Remove(item);
     }
 
     public List<Item> GetItems()
     {
-        return items;
+        return Items;
     }
 }

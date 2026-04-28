@@ -4,13 +4,18 @@ using Spectre.Console;
 using PAC.UI;
 namespace PAC.Core;
 
+using PAC.World;
+using PAC.Services;
+
 public class GameEngine
 {
     private Player player;
     private GameState state;
     private Display display = new Display();
     private Menu menu = new Menu();
-
+    private WorldManager world = new WorldManager();
+    private EnemyFactory enemyFactory = new EnemyFactory();
+    private SaveService saveService = new SaveService();
     public void Start()
     {
         state = GameState.Menu;
@@ -41,9 +46,18 @@ public class GameEngine
         if (choice == "New Game")
         {
             string playerName = menu.AskPlayerName();
-
             player = new Player(playerName);
             state = GameState.Exploration;
+        }
+        else if (choice == "Load Game")
+        {
+            Player? loadedPlayer = saveService.Load();
+
+            if (loadedPlayer != null)
+            {
+                player = loadedPlayer;
+                state = GameState.Exploration;
+            }
         }
         else if (choice == "Quit")
         {
@@ -65,32 +79,59 @@ public class GameEngine
                     .AddChoices(
                         "Explore an area",
                         "Show inventory",
+                        "Save game",
                         "Return to menu"
                     ));
 
             switch (choice)
             {
                 case "Explore an area":
-                    Enemy enemy = new Enemy("Gobelin", 50, 5, 50);
 
-                    CombatManager combat = new CombatManager();
-                    Item? loot = combat.StartCombat(player, enemy);
+                    int roll = world.GetRandomEvent();
 
-                    if (loot != null)
+                    if (roll == 0)
                     {
-                        player.Inventory.AddItem(loot);
-                    }
-
-                    if (!player.IsAlive)
-                    {
-                        AnsiConsole.MarkupLine("[red]Game Over...[/]");
+                        AnsiConsole.MarkupLine("[grey]Nothing happens...[/]");
                         Console.ReadKey();
-                        Environment.Exit(0);
                     }
+                    else if (roll == 1)
+                    {
+                        Enemy enemy = enemyFactory.CreateRandomEnemy();
+
+                        CombatManager combat = new CombatManager();
+                        Item? loot = combat.StartCombat(player, enemy);
+
+                        if (loot != null)
+                        {
+                            player.Inventory.AddItem(loot);
+                        }
+
+                        if (!player.IsAlive)
+                        {
+                            AnsiConsole.MarkupLine("[red]Game Over...[/]");
+                            Console.ReadKey();
+                            Environment.Exit(0);
+                        }
+                    }
+                    else
+                    {
+                        Item potion = new Item("Potion", "Heals 20 HP", 20);
+                        player.Inventory.AddItem(potion);
+
+                        AnsiConsole.MarkupLine("[green]You found a potion![/]");
+                        Console.ReadKey();
+                    }
+
                     break;
 
                 case "Show inventory":
                     ShowInventory();
+                    break;
+
+                case "Save game":
+                    saveService.Save(player);
+                    AnsiConsole.MarkupLine("[green]Game saved![/]");
+                    Console.ReadKey();
                     break;
 
                 case "Return to menu":

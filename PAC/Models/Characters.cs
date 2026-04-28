@@ -1,13 +1,11 @@
-﻿using PAC.Interfaces;
+﻿namespace PAC.Models;
 
-namespace PAC.Models;
-
-public abstract class Character : IAttackable
+public abstract class Character
 {
-    public string Name { get; private set; }
-    public int Health { get; private set; }
-    public int MaxHealth { get; private set; }
-    public int Attack { get; private set; }
+    public string Name { get; set; }
+    public int Health { get; set; }
+    public int MaxHealth { get; set; }
+    public int Attack { get; set; }
 
     public bool IsAlive => Health > 0;
 
@@ -38,6 +36,6 @@ public abstract class Character : IAttackable
     public void IncreaseMaxHealth(int amount)
     {
         MaxHealth += amount;
-        Health = MaxHealth;
+        Health += amount;
     }
 }

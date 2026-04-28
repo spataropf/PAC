@@ -1,10 +1,12 @@
-﻿using PAC.Interfaces;
-using PAC.Models;
+﻿using PAC.Models;
 using Spectre.Console;
+
 namespace PAC.Combat;
 
 public class CombatManager
 {
+    private Random random = new Random();
+
     public Item? StartCombat(Player player, Enemy enemy)
     {
         while (player.IsAlive && enemy.IsAlive)
@@ -22,7 +24,15 @@ public class CombatManager
             AnsiConsole.MarkupLine("[grey]Press a key to attack...[/]");
             Console.ReadKey();
 
-            enemy.TakeDamage(player.Attack);
+            int damage = player.Attack;
+
+            if (random.Next(0, 2) == 0)
+            {
+                damage *= 2;
+                AnsiConsole.MarkupLine("[yellow]Critical hit![/]");
+            }
+
+            enemy.TakeDamage(damage);
 
             if (!enemy.IsAlive)
                 break;
@@ -30,7 +40,7 @@ public class CombatManager
             player.TakeDamage(enemy.Attack);
         }
 
-        Console.Clear();
+        AnsiConsole.Clear();
 
         if (player.IsAlive)
         {
@@ -38,7 +48,7 @@ public class CombatManager
             player.GainExperience(enemy.RewardXp);
 
             Item potion = new Item("Potion", "Heals 20 HP", 20);
-            Console.WriteLine("You found a potion!");
+            AnsiConsole.MarkupLine("[green]You found a potion![/]");
             Console.ReadKey();
 
             return potion;
