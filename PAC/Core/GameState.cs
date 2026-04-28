@@ -3,6 +3,5 @@
 public enum GameState
 {
     Menu,
-    Exploration,
-    Combat
+    Exploration
 }

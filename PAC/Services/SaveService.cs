@@ -1,4 +1,5 @@
 ﻿using PAC.Models;
+using Spectre.Console;
 using System.Text.Json;
 
 namespace PAC.Services;
@@ -28,5 +29,9 @@ public class SaveService
         }
 
         return player;
+    }
+    public string AskPlayerName()
+    {
+        return AnsiConsole.Ask<string>("[green]Player Name :[/]");
     }
 }

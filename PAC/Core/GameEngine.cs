@@ -45,7 +45,7 @@ public class GameEngine
 
         if (choice == "New Game")
         {
-            string playerName = menu.AskPlayerName();
+            string playerName = saveService.AskPlayerName();
             player = new Player(playerName);
             state = GameState.Exploration;
         }

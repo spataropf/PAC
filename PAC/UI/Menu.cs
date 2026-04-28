@@ -18,9 +18,4 @@ public class Menu
                 .Title("[yellow]Choose an option :[/]")
                 .AddChoices("New Game", "Load Game", "Quit"));
     }
-
-    public string AskPlayerName()
-    {
-        return AnsiConsole.Ask<string>("[green]Player Name :[/]");
-    }
 }
