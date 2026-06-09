@@ -1,9 +1,10 @@
-﻿using PAC.Models;
+﻿
+namespace PAC.Core;
+
+using PAC.Models;
 using PAC.Combat;
 using Spectre.Console;
 using PAC.UI;
-namespace PAC.Core;
-
 using PAC.World;
 using PAC.Services;
 
