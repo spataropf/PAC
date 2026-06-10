@@ -176,7 +176,7 @@ public class GameEngine
         if (choice == "Back")
             return;
 
-        Item selectedItem = null;
+        Item? selectedItem = null;
 
         foreach (Item item in items)
         {

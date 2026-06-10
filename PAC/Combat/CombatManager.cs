@@ -1,4 +1,5 @@
-﻿using PAC.Models;
+﻿using PAC.Interfaces;
+using PAC.Models;
 using Spectre.Console;
 
 namespace PAC.Combat;
@@ -9,6 +10,8 @@ public class CombatManager
 
     public Item? StartCombat(Player player, Enemy enemy)
     {
+    
+
         while (player.IsAlive && enemy.IsAlive)
         {
             AnsiConsole.Clear();
@@ -24,13 +27,23 @@ public class CombatManager
             AnsiConsole.MarkupLine("[grey]Press a key to attack...[/]");
             Console.ReadKey();
 
-            int damage = player.Attack;
+
+            IAttack attack;
 
             if (random.Next(0, 2) == 0)
             {
-                damage *= 2;
+                attack = new CriticalAttack();
                 AnsiConsole.MarkupLine("[yellow]Critical hit![/]");
             }
+            else
+            {
+                attack = new NormalAttack();
+            }
+
+
+            int damage = attack.CalculateDamage(player.Attack);
+            AnsiConsole.MarkupLine($"[green]You deal {damage} damage![/]");
+            Console.ReadKey();
 
             enemy.TakeDamage(damage);
 
