@@ -15,10 +15,12 @@ public class GameEngine
     private GameState state;
     private Display display = new Display();
     private Menu menu = new Menu();
-    private WorldManager world = new WorldManager();
+    private WorldManager worldManager = new WorldManager();
     private EnemyFactory enemyFactory = new EnemyFactory();
     private SaveService saveService = new SaveService();
     private InventoryMenu inventoryMenu = new InventoryMenu();
+    private CombatManager combatManager = new CombatManager();
+    private ExplorationManager explorationManager = new ExplorationManager();
     public void Start()
     {
         state = GameState.Menu;
@@ -89,42 +91,7 @@ public class GameEngine
             switch (choice)
             {
                 case "Explore an area":
-
-                    int roll = world.GetRandomEvent();
-
-                    if (roll == 0)
-                    {
-                        AnsiConsole.MarkupLine("[grey]Nothing happens...[/]");
-                        Console.ReadKey();
-                    }
-                    else if (roll == 1)
-                    {
-                        Enemy enemy = enemyFactory.CreateRandomEnemy();
-
-                        CombatManager combat = new CombatManager();
-                        Item? loot = combat.StartCombat(player, enemy);
-
-                        if (loot != null)
-                        {
-                            player.Inventory.AddItem(loot);
-                        }
-
-                        if (!player.IsAlive)
-                        {
-                            AnsiConsole.MarkupLine("[red]Game Over...[/]");
-                            Console.ReadKey();
-                            Environment.Exit(0);
-                        }
-                    }
-                    else
-                    {
-                        Item potion = new Item("Potion", "Heals 20 HP", 20);
-                        player.Inventory.AddItem(potion);
-
-                        AnsiConsole.MarkupLine("[green]You found a potion![/]");
-                        Console.ReadKey();
-                    }
-
+                    explorationManager.Explore(player);
                     break;
 
                 case "Show inventory":
